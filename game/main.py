@@ -82,6 +82,23 @@ class Dinosaur:
             self.dino_run = True
             self.dino_jump = False
 
+    def update_action(self, action):
+        if action == "jump" and not self.dino_jump:
+            self.dino_duck = False
+            self.dino_run = False
+            self.dino_jump = True
+        elif action == "duck" and not self.dino_jump:
+            self.dino_duck = True
+            self.dino_run = False
+            self.dino_jump = False
+        elif action == "run":
+            self.dino_duck = False
+            self.dino_run = True
+            self.dino_jump = False
+
+        self.update({})
+
+
     def duck(self):
         self.image = self.duck_img[self.step_index // 5]
         self.dino_rect = self.image.get_rect()
@@ -251,20 +268,21 @@ def main(mode, agent):
         player.update(userInput)
 
         if len(obstacles) == 0:
-            if random.randint(0, 2) == 0:
+            obstacle_type = random.choice(["small", "large", "bird"])
+            if obstacle_type == "small":
                 obstacles.append(SmallCactus(SMALL_CACTUS))
-            elif random.randint(0, 2) == 1:
+            elif obstacle_type == "large":
                 obstacles.append(LargeCactus(LARGE_CACTUS))
-            elif random.randint(0, 2) == 2:
+            else:
                 obstacles.append(Bird(BIRD))
-
+                
         for obstacle in obstacles:
             obstacle.draw(SCREEN)
             obstacle.update()
             if player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(2000)
                 death_count += 1
-                menu(death_count)
+                menu(mode, death_count=death_count)
 
         background()
 

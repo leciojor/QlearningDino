@@ -78,7 +78,7 @@ def learn_dqn(batch, optim, q_network, target_network, gamma, global_step, targe
   if not global_step % target_update:
     target_network.load_state_dict(q_network.state_dict())
 
-def dqn_main(epochs, episode_limit, hidden_size, hidden_size_final):
+def dqn_main(epochs, episode_limit, hidden_size, hidden_size_final, interval_save):
   lr = 1e-3
   start_training = 1000
   gamma = 0.99
@@ -133,14 +133,16 @@ def dqn_main(epochs, episode_limit, hidden_size, hidden_size_final):
     results_dqn.append(cum_reward)
     loop.update(1)
     loop.set_description('Episodes: {} Reward: {}'.format(epoch, cum_reward))
-
+    if not epoch % interval_save:
+      torch.save(q_network.state_dict(), f"q_net_{epochs}_{episode_limit}_{hidden_size}_{hidden_size_final}_EPOCH:{epoch}.pkl") 
+       
   torch.save(q_network.state_dict(), f"q_net_{epochs}_{episode_limit}_{hidden_size}_{hidden_size_final}.pkl")  
   return results_dqn
 epochs = 3000
 episode_limit = 800
 hidden_size = 128
 hidden_size_final = 64
-results_dqn = dqn_main(epochs, episode_limit, hidden_size, hidden_size_final)
+results_dqn = dqn_main(epochs, episode_limit, hidden_size, hidden_size_final, 500)
 plt.plot(results_dqn)
 plt.savefig(f"q_net_{epochs}_{episode_limit}_plot.png")
 plt.show()
