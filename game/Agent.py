@@ -10,7 +10,7 @@ class Agent:
         state_size = 8
         action_size = 3
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        self.model = QNetwork(state_size, action_size, 8, 8).to(device)
+        self.model = QNetwork(state_size, action_size, 64, 32).to(device)
         self.model.load_state_dict(torch.load(model, map_location=device))
         self.model.eval()
 
