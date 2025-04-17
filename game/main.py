@@ -295,7 +295,7 @@ def main(mode, agent):
         pygame.display.update()
 
 
-def menu(mode, death_count, model="model/models/q_net_2000_50000_128_64_dueling_EPOCH_200.pkl"):
+def menu(mode, death_count, model="model/models/q_net_2000_50000_128_64_dueling_EPOCH_550.pkl"):
     global points
     run = True
     while run:
